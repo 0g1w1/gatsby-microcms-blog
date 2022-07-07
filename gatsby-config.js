@@ -1,3 +1,18 @@
+const path = require("path")
+
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+console.log(process.env.NODE_ENV)
+
+if (typeof process.env.API_KEY == "undefined") {
+  console.error('Error: "API_KEY" is not set.')
+  console.error("Please consider adding a .env file with API_KEY.")
+  process.exit(1)
+}
+
+console.log(process.env.API_KEY)
+
 module.exports = {
   siteMetadata: {
     title: `Gatsby Default Starter`,
@@ -29,6 +44,18 @@ module.exports = {
         // theme_color: `#663399`,
         display: `minimal-ui`,
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+      },
+    },
+    {
+      resolve: "gatsby-source-microcms",
+      options: {
+        apiKey: process.env.API_KEY,
+        serviceId: "rootog",
+        apis: [
+          {
+            endpoint: "blog",
+          },
+        ],
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
